@@ -1,0 +1,8 @@
+flask
+mutagen
+passlib
+httplib2
+dropbox
+google-api-python-client
+mysqlclient
+spotipy

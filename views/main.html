@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+  
+  <link rel="stylesheet" href="/static/dropzone.css" type="text/css">
+  <link rel="stylesheet" href="/static/main.css" type="text/css">
+  <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/static/main.js"></script>
+  <script type=text/javascript>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
+</head>
+<body>
+  <div id="menu_nav">
+    <div id="login_nav">
+      
+
+      {% if loggedIn %}
+        <div id="logged_in"> Welcome Back! <br>{{username}}</div>
+        <form action="/logout" method="POST" id="logout_form">
+          <input type="submit" name="logout" value="Logout"/>
+        </form>
+      {% else %}
+        <form action="/login" method="POST" id="login_form">
+          <span>Welcome!</span>
+          <input type="text" id="username" name="username" placeholder="username"/>
+          <input type="password" id="passowrd" name="password" placeholder="******"/>
+          <input type="submit" name="submit" value="Login"/> <input type="submit" name="submit" value="Sign Up"/>
+        </form>
+      {% endif %}
+      
+    </div>
+    <div id="title_nav">
+      <span>Museeks</span>
+      
+    </div>
+  </div>
+  <div id="main_container">
+    <div id="main_content">
+      <div class='buttonDiv' id='chooseLib'>
+        <button id="all" class="active" style="margin-left:25%;">Library</button>
+        <button id="requests">Requests</button>
+      </div>
+      <!-- <form method="POST" enctype="multipart/form-data" action="/" id="upload_form">
+        <input type="file" name="file" accept=".mp3,.m4a,.wma,.flac,.ogg" multiple/>
+        <input type="submit" />
+      </form> -->
+      <div id="split_form" class="edit-form">
+        <button id="split_button">Split Live Concert</button>
+      </div>
+      <form method="POST" action="/split" id="split_dialog" hidden>
+        
+        <textarea name="songlist" placeholder="Enter the track listing for the concert. Make sure the time and track are seperated by a dash (-)" ></textarea>
+        <input type="hidden" name="artist" id="split_artist" value="" />
+        <input type="hidden" name="split_track" id="split_track" value="" />
+        <input type="button" id="split_accept" value="Split"/>
+        <input type="button" id="split_cancel" value="Cancel" />
+        <input type="submit" id="split_submit" hidden />
+      </form>
+      <table id="audio_list" cellpadding="5" cellspacing="1">
+        <tr id="header">
+          <th id="-1" width="3%"></th>
+          <th id="0" width="29%">Name </th>
+          <th id="1" width="10%">Time</th>
+          <th id="2" width="29%">Artist<span class="chevron down"></span></th>
+          <th id="3" width="29%">Album</th>
+        </tr>
+
+        {% for song in all_songs %}
+          <tr class="song {{song.type}}" id="{{song.num}}">
+            
+            <td>
+              <!-- <input type=hidden name="{{song.link}}" value="" -->
+              <input type=hidden value="{{song.link}}" />
+              <input class="check" type="checkbox"/>
+            </td>
+            <td class="title">{{song.title}}</td>
+            <td class="time">{{song.min}}:{{song.sec}}</td>
+            <td class="artist">{{song.artist}}</td>
+            <td class="album">{{song.album}}</td>
+          </tr>
+        {% endfor %}
+      </table>
+      <div id="all_requests">
+        {% for request in requests %}
+          <table class="request" id="request.id">
+
+          </table>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div id="darkened_back" hidden></div>
+  <script type="text/javascript" src="/static/dropzone.js"></script>
+  
+  
+</body>
+
+</html>
